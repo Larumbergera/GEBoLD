@@ -22,6 +22,8 @@ markupsafe==2.1.5
     # via jinja2
 mccabe==0.7.0
     # via pylint
+numpy==2.0.0
+    # via -r requirements.txt
 packaging==24.1
     # via
     #   build
