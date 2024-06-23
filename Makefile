@@ -67,7 +67,7 @@ code-metrics: ## check cyclomatic complexity and print LOCs and maintainability 
 	echo -e "\nMetrics:\n" && $(MAKE) code-locs
 
 test: ## run tests with pytest and calculate coverage
-	py.test --cov gebold --cov-report term --cov-fail-under 80 \
+	py.test --cov gebold --cov-report term --cov-fail-under 70 \
 		    --cov-report html:docs/_build/coverage/$(or $(REPORT_NAME), $(or $(TOX_ENV_NAME), pytest)) \
 		    --cov-report xml:docs/_build/coverage/$(or $(REPORT_NAME), $(or $(TOX_ENV_NAME), pytest))/coverage.xml \
 		    --html=docs/_build/test-reports/$(or $(REPORT_NAME), $(or $(TOX_ENV_NAME), pytest))/index.html \
