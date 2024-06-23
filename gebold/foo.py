@@ -8,7 +8,7 @@ def foo_sum(a: int, b: int) -> int:
 
 def foo_substract(a: int, b: int) -> int:
     return np.subtract(a, b)
-    
+
 
 def foo_prod(a: int, b: int) -> int:
     return np.prod([a, b])
