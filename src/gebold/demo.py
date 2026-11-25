@@ -185,7 +185,11 @@ def open_window(x: int, y: int) -> None:
 def run(args: argparse.Namespace) -> int:
     """Main loop."""
     ensure_scrfd(args.models_dir)  # downloads the face detector the first time
-    pipeline = GazePipeline(args.models_dir, device=args.device)
+    try:
+        pipeline = GazePipeline(args.models_dir, device=args.device)
+    except FileNotFoundError as error:
+        print(error, file=sys.stderr)
+        return 1
     model = GazeModel.load(args.load) if args.load else pipeline.gaze_model
     x0, y0, width, height = screen_geometry(args.screen)
     options = Options(args.frames, (args.cols, args.rows), args.smoothing, not args.no_mirror)
