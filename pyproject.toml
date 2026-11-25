@@ -1,0 +1,99 @@
+[project]
+name = "gebold"
+version = "0.2.0.dev0"
+description = "Webcam gaze estimation with per-user calibration, from the thesis 'Gaze Estimation Based on Machine Learning'."
+readme = "README.md"
+license = "CC-BY-NC-SA-4.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Andoni Larumbe Bergera", email = "a.larumbergera@gmail.com" }]
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "numpy>=1.24,<2",
+    "onnxruntime>=1.17",
+    "opencv-python>=4.8,<5",
+]
+
+[project.optional-dependencies]
+# Models were trained with TensorFlow 2.4 (Keras 2). 2.15 is the last release that ships Keras 2
+# built in, so the original .h5 files load without conversion.
+tf = [
+    "tensorflow==2.15.*",
+]
+# Convert the thesis .h5 models to ONNX.
+export = [
+    "gebold[tf]",
+    "tf2onnx>=1.17",
+]
+# Score the models on GI4E and I2Head (reads the I2Head .mat grid).
+eval = [
+    "scipy>=1.11",
+]
+demo = [
+    "screeninfo>=0.8",
+]
+
+[project.scripts]
+gebold-export = "gebold.export:main"
+gebold-evaluate = "gebold.evaluate:main"
+gebold-demo = "gebold.demo:main"
+
+[dependency-groups]
+dev = [
+    "onnx>=1.16,<1.17",  # newer onnx needs an ml_dtypes that TensorFlow 2.15 does not allow
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.8",
+    "rust-just>=1.36",
+]
+
+[build-system]
+requires = ["uv_build>=0.8,<0.14"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle
+    "F",       # pyflakes
+    "I",       # import order
+    "UP",      # pyupgrade
+    "B",       # bugbear
+    "C4",      # comprehensions
+    "SIM",     # simplify
+    "NPY",     # numpy
+    "PT",      # pytest style
+    "PL",      # pylint
+    "C90",     # mccabe cyclomatic complexity
+    "D",       # docstrings
+    "RUF",
+]
+ignore = [
+    "D105", "D107",
+    "PLR2004",  # magic values: geometry is full of meaningful literals
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pylint]
+max-args = 6
+max-branches = 12
+max-statements = 50
+max-returns = 6
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "tf: needs TensorFlow (install the 'tf' extra)",
+    "models: needs the ONNX model files (run `just models`)",
+]

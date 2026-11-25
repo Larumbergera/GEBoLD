@@ -75,7 +75,7 @@ target/
 .ipynb_checkpoints
 
 # pyenv
-.python-version
+# .python-version is tracked: uv uses it to pick Python 3.11
 
 # celery beat schedule file
 celerybeat-schedule
@@ -109,3 +109,10 @@ ENV/
 
 # Emacs
 *~
+# Ruff
+.ruff_cache/
+
+# Model files (thesis weights and SCRFD are not distributed with the code)
+models/
+*.onnx
+*.h5

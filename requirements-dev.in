@@ -1,8 +1,0 @@
--r requirements.txt
-
-pip-tools
-pycodestyle
-pylint
-pytest
-pytest-cov
-pytest-html
