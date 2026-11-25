@@ -16,6 +16,8 @@ The demo opens a full-screen window: press `C` and look at each green point, pre
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
 2. Put the model files in `models/` (or point `GEBOLD_MODELS_DIR` to them): `e_clandet.onnx`, `f_clandet.onnx` and `defc_s.npz`. `just models` exports them from the original Keras models of the thesis; the SCRFD detector (`det_500m.onnx`) is downloaded automatically.
+
+   > **Pending:** the trained weights are not published yet. The plan is to release them on the Hugging Face Hub and have the demo download them automatically; until then, the files have to be obtained from the author.
 3. From the repository folder run:
 
    ```bash
@@ -54,7 +56,7 @@ The databases used in the thesis are not distributed with GEBoLD; request them f
 
 ## License
 
-Copyright (c) 2020-2023 Universidad Pública de Navarra (original thesis code, author: Andoni Larumbe Bergera).  
+Copyright (c) 2018-2023 Universidad Pública de Navarra (original thesis code, author: Andoni Larumbe Bergera).  
 Copyright (c) 2026 Andoni Larumbe Bergera (new code and changes).
 
 GEBoLD is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/) (CC BY-NC-SA 4.0), the same license as the thesis. You may use, share and adapt it for non-commercial purposes, giving appropriate credit; works based on it must be distributed under the same license. Commercial use is not permitted. Because of the non-commercial clause, this is source-available software rather than open source in the OSI sense.

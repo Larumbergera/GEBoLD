@@ -35,21 +35,21 @@ def test_thesis_models_have_unique_names():
 
 def test_ensure_scrfd_does_not_download_when_present(monkeypatch, tmp_path):
     (tmp_path / models.SCRFD_FILENAME).write_bytes(b"model")
-    monkeypatch.setattr(models.urllib.request, "urlretrieve", pytest.fail)
+    monkeypatch.setattr(models, "download", pytest.fail)
     assert ensure_scrfd(tmp_path) == tmp_path / models.SCRFD_FILENAME
 
 
 def fake_download(content: bytes):
-    def urlretrieve(_url, dest):
+    def fake(_url, dest):
         with zipfile.ZipFile(dest, "w") as zf:
             zf.writestr(models.SCRFD_FILENAME, content)
             zf.writestr("w600k_mbf.onnx", b"not needed")
 
-    return urlretrieve
+    return fake
 
 
 def test_ensure_scrfd_extracts_detector_after_checking_hash(monkeypatch, tmp_path):
-    monkeypatch.setattr(models.urllib.request, "urlretrieve", fake_download(b"detector"))
+    monkeypatch.setattr(models, "download", fake_download(b"detector"))
     fake = tmp_path / "probe.zip"
     fake_download(b"detector")(None, fake)
     monkeypatch.setattr(models, "SCRFD_ZIP_SHA256", hashlib.sha256(fake.read_bytes()).hexdigest())
@@ -59,7 +59,7 @@ def test_ensure_scrfd_extracts_detector_after_checking_hash(monkeypatch, tmp_pat
 
 
 def test_ensure_scrfd_rejects_wrong_hash(monkeypatch, tmp_path):
-    monkeypatch.setattr(models.urllib.request, "urlretrieve", fake_download(b"tampered"))
+    monkeypatch.setattr(models, "download", fake_download(b"tampered"))
     with pytest.raises(RuntimeError, match="SHA-256"):
         ensure_scrfd(tmp_path)
     assert not (tmp_path / models.SCRFD_FILENAME).exists()

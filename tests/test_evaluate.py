@@ -94,3 +94,9 @@ def test_real_pipeline_on_sample_frames(database):
     assert result.e_clandet.pupils[0] < 2.0
     assert result.e_clandet.accuracy[2] == 100.0
     assert result.f_clandet.pupils[0] < 3.0
+
+
+def test_pipeline_lists_missing_models(tmp_path):
+    (tmp_path / SCRFD_FILENAME).write_bytes(b"")
+    with pytest.raises(FileNotFoundError, match=r"f_clandet\.onnx, e_clandet\.onnx, defc_s\.npz"):
+        GazePipeline(tmp_path)

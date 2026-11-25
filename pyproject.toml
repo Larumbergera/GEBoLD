@@ -1,6 +1,6 @@
 [project]
 name = "gebold"
-version = "0.2.0.dev0"
+version = "0.2.1"
 description = "Webcam gaze estimation with per-user calibration, from the thesis 'Gaze Estimation Based on Machine Learning'."
 readme = "README.md"
 license = "CC-BY-NC-SA-4.0"
@@ -11,6 +11,7 @@ dependencies = [
     "numpy>=1.24,<2",
     "onnxruntime>=1.17",
     "opencv-python>=4.8,<5",
+    "truststore>=0.9",  # system certificates for downloads (antivirus, proxies)
 ]
 
 [project.optional-dependencies]

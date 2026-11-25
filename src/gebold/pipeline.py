@@ -54,6 +54,13 @@ class GazePipeline:
         device: Device = "cpu",
     ):
         directory = directory or models_dir()
+        required = [SCRFD_FILENAME, F_CLANDET.filename, E_CLANDET.filename, DEFC_S.filename]
+        if missing := [name for name in required if not (directory / name).exists()]:
+            raise FileNotFoundError(
+                f"missing model files in {directory.resolve()}: {', '.join(missing)}. "
+                "Run `just models` to export them from the thesis models, copy them there, "
+                "or set GEBOLD_MODELS_DIR to the folder that has them."
+            )
         self.detector = FaceDetector(
             directory / SCRFD_FILENAME, input_size=detector_size, device=device
         )

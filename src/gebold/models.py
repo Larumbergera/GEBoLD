@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import os
 import shutil
+import ssl
 import tempfile
 import urllib.request
 import zipfile
@@ -84,6 +85,20 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def download(url: str, target: Path) -> None:
+    """Download ``url`` to ``target`` trusting the certificates of the operating system.
+
+    Python's own certificate list does not include the certificates that some antivirus programs
+    and corporate proxies add to Windows, and the download then fails with
+    ``CERTIFICATE_VERIFY_FAILED``; ``truststore`` uses the system store instead.
+    """
+    import truststore  # noqa: PLC0415
+
+    context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    with urllib.request.urlopen(url, context=context) as response, target.open("wb") as out:
+        shutil.copyfileobj(response, out)
+
+
 def ensure_scrfd(directory: Path | None = None) -> Path:
     """Return the SCRFD-500MF model, downloading it from InsightFace if it is not there yet.
 
@@ -97,7 +112,7 @@ def ensure_scrfd(directory: Path | None = None) -> Path:
     directory.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         archive = Path(tmp) / "buffalo_sc.zip"
-        urllib.request.urlretrieve(SCRFD_URL, archive)
+        download(SCRFD_URL, archive)
         if (digest := sha256(archive)) != SCRFD_ZIP_SHA256:
             raise RuntimeError(f"unexpected SHA-256 for {SCRFD_URL}: {digest}")
         with (
