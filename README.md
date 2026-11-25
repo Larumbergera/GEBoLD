@@ -16,6 +16,8 @@ The demo opens a full-screen window: press `C` and look at each green point, pre
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
 2. Put the model files in `models/` (or point `GEBOLD_MODELS_DIR` to them): `e_clandet.onnx`, `f_clandet.onnx` and `defc_s.npz`. `just models` exports them from the original Keras models of the thesis; the SCRFD detector (`det_500m.onnx`) is downloaded automatically.
+
+   > **Pending:** the trained weights are not published yet. The plan is to release them on the Hugging Face Hub and have the demo download them automatically; until then, the files have to be obtained from the author.
 3. From the repository folder run:
 
    ```bash
