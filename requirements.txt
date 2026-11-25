@@ -1,4 +1,0 @@
-click==8.1.7
-    # via -r requirements.in
-numpy==2.0.0
-    # via -r requirements.in
